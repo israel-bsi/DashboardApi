@@ -1,8 +1,8 @@
-﻿using DashboardApi.Models;
+﻿using DashboardApi.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DashboardApi.Mappings;
+namespace DashboardApi.Data.Mappings;
 
 public class ProjectMap : IEntityTypeConfiguration<Project>
 {
@@ -11,7 +11,7 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
         builder.ToTable("projects");
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Id).HasColumnName("project_id");
-        //builder.Property(p => p.Title).HasColumnName("title");
+        builder.Property(p => p.Title).HasColumnName("title");
         builder.Property(p => p.Name).HasColumnName("name");
         builder.Property(p => p.Description).HasColumnName("description");
         builder.Property(p => p.AmountHours).HasColumnName("amount_hours");
@@ -22,7 +22,7 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
         builder.Property(p => p.Customer).HasColumnName("customer");
         builder.Property(p => p.Value).HasColumnName("value");
         builder.Property(p => p.StatusId).HasColumnName("status_id");
-        //builder.Property(p => p.DeveloperId).HasColumnName("developer_id");
+        builder.Property(p => p.DeveloperId).HasColumnName("developer_id");
         builder.Property(p => p.UserId).HasColumnName("user_id");
         builder.Property(p => p.PaymentId).HasColumnName("payment_id");
         builder.Property(p => p.LastUpdateAt).HasColumnName("last_update");

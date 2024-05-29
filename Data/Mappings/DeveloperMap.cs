@@ -1,8 +1,8 @@
-﻿using DashboardApi.Models;
+﻿using DashboardApi.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DashboardApi.Mappings;
+namespace DashboardApi.Data.Mappings;
 
 public class DeveloperMap : IEntityTypeConfiguration<Developer>
 {

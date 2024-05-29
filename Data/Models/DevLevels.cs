@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace DashboardApi.Models;
+﻿namespace DashboardApi.Data.Models;
 
 public class DevLevels
 {

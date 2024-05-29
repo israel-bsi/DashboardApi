@@ -1,9 +1,9 @@
-﻿namespace DashboardApi.Models;
+﻿namespace DashboardApi.Data.Models;
 
 public class Project
 {
     public int Id { get; set; }
-    //public int? Title { get; set; }
+    public int? Title { get; set; }
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
     public string AmountHours { get; set; } = null!;
@@ -14,8 +14,8 @@ public class Project
     public string Customer { get; set; } = null!;
     public decimal Value { get; set; }
     public int? StatusId { get; set; }
-    //public int? DeveloperId { get; set; }
+    public int? DeveloperId { get; set; }
     public int? UserId { get; set; }
     public int? PaymentId { get; set; }
-    public DateTime LastUpdateAt { get; set; }
+    public DateTime? LastUpdateAt { get; set; }
 }

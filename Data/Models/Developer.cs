@@ -1,4 +1,4 @@
-﻿namespace DashboardApi.Models;
+﻿namespace DashboardApi.Data.Models;
 
 public class Developer
 {
