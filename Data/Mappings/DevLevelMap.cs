@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DashboardApi.Data.Mappings;
 
-public class DeveloperMap : IEntityTypeConfiguration<Developer>
+public class DevLevelMap : IEntityTypeConfiguration<DevLevel>
 {
-    public void Configure(EntityTypeBuilder<Developer> builder)
+    public void Configure(EntityTypeBuilder<DevLevel> builder)
     {
-        builder.ToTable("Developer");
+        builder.ToTable("DevLevel");
 
         builder.HasKey(p => p.Id);
 
@@ -16,14 +16,9 @@ public class DeveloperMap : IEntityTypeConfiguration<Developer>
             .ValueGeneratedOnAdd()
             .UseMySqlIdentityColumn();
 
-        builder.Property(p => p.Name)
+        builder.Property(p => p.Description)
             .IsRequired()
             .HasColumnType("VARCHAR")
             .HasMaxLength(100);
-
-        builder.HasOne(d => d.Devlevel)
-            .WithMany(dl => dl.Developers)
-            .HasForeignKey(d => d.DevLevelId)
-            .HasConstraintName("FK_Developer_DevLevel");
     }
 }

@@ -12,20 +12,19 @@ namespace DashboardApi.Controllers;
 public class DeveloperController(DashboardContext context, IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetDevelopers()
+    public async Task<ActionResult<IEnumerable<Developer>>> GetDevelopers()
     {
         var developers = await context.Developers
-            .Include(dl=>dl.Devlevel)
             .AsNoTracking()
             .ToListAsync();
+
         return Ok(developers);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetDeveloper([FromRoute] int id)
+    public async Task<ActionResult<Developer>> GetDeveloperById([FromRoute] int id)
     {
         var developer = await context.Developers
-            .Include(dl=>dl.Devlevel)
             .AsNoTracking()
             .FirstOrDefaultAsync(d=>d.Id == id);
 
@@ -50,14 +49,20 @@ public class DeveloperController(DashboardContext context, IMapper mapper) : Con
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostDeveloper([FromBody] CreateDeveloperDto developerDto)
+    public async Task<ActionResult<Developer>> PostDeveloper([FromBody] CreateDeveloperDto developerDto)
     {
         var developer = mapper.Map<Developer>(developerDto);
 
         context.Developers.Add(developer);
+
+        var devLevel = await context.DevLevels.FindAsync(developerDto.DevLevelId);
+        if (devLevel == null)
+            return BadRequest(new {error = "Invalid DevLevelId" });
+
+        developer.Devlevel = devLevel;
         await context.SaveChangesAsync();
 
-        return CreatedAtAction("GetDeveloper", new { id = developer.Id }, developer);
+        return CreatedAtAction(nameof(GetDeveloperById), new { id = developer.Id }, developer);
     }
 
     [HttpDelete("{id:int}")]

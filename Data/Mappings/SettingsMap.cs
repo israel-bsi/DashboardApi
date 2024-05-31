@@ -8,8 +8,11 @@ public class SettingsMap : IEntityTypeConfiguration<Settings>
 {
     public void Configure(EntityTypeBuilder<Settings> builder)
     {
-        builder.ToTable("settings");
-        builder.Property(x => x.ValuePerHour).HasColumnName("valueperhour");
+        builder.ToTable("Settings");
+
+        builder.Property(x => x.ValuePerHour)
+            .HasColumnType("DECIMAL(7,2)");
+            
         builder.HasNoKey();
     }
 }

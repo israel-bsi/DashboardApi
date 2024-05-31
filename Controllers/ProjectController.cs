@@ -1,4 +1,6 @@
-﻿using DashboardApi.Context;
+﻿using AutoMapper;
+using DashboardApi.Context;
+using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +9,7 @@ namespace DashboardApi.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProjectController(DashboardContext context) : ControllerBase
+public class ProjectController(DashboardContext context, IMapper mapper) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
@@ -16,9 +18,11 @@ public class ProjectController(DashboardContext context) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Project>> GetProject(int id)
+    public async Task<ActionResult<Project>> GetProjectById([FromRoute] int id)
     {
-        var project = await context.Projects.AsNoTracking().Where(p => p.Id == id).FirstOrDefaultAsync();
+        var project = await context.Projects
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p=>p.Id == id);
 
         if (project == null)
             return NotFound();
@@ -27,38 +31,31 @@ public class ProjectController(DashboardContext context) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutProject(int id, Project project)
+    public async Task<IActionResult> PutProject([FromRoute] int id, [FromBody] UpdateProjectDto projectDto)
     {
-        if (id != project.Id)
-            return BadRequest();
+       var project = await context.Projects.FindAsync(id);
+        if (project == null)
+            return NotFound();
 
-        context.Entry(project).State = EntityState.Modified;
-
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!context.Projects.Any(e => e.Id == id))
-                return NotFound();
-            throw;
-        }
+        mapper.Map(projectDto, project);
+        await context.SaveChangesAsync();
 
         return NoContent();
     }
 
     [HttpPost]
-    public async Task<ActionResult<Project>> PostProject(Project project)
+    public async Task<ActionResult<Project>> PostProject([FromBody] CreateProjectDto projectDto)
     {
+        var project = mapper.Map<Project>(projectDto);
+
         context.Projects.Add(project);
         await context.SaveChangesAsync();
 
-        return CreatedAtAction("GetProject", new { id = project.Id }, project);
+        return CreatedAtAction(nameof(GetProjectById), new { id = project.Id }, project);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProject(int id)
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteProject([FromRoute] int id)
     {
         var Project = await context.Projects.FindAsync(id);
         if (Project == null)
