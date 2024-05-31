@@ -51,11 +51,6 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
             .HasColumnType("DATE")
             .HasDefaultValue(DateTime.Now.ToUniversalTime());
 
-        builder.HasOne(p => p.Status)
-            .WithMany(ps=>ps.Projects)
-            .HasForeignKey(p => p.StatusId)
-            .HasConstraintName("FK_Project_Status");
-
         builder.HasOne(p => p.User)
             .WithMany(u=>u.Projects)
             .HasForeignKey(p => p.UserId)

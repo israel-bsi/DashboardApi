@@ -12,9 +12,6 @@ public class Project
     public DateTime RequestedAt { get; set; }
     public string Customer { get; set; } = null!;
     public decimal Value { get; set; }
-    public int StatusId { get; set; }
-    [JsonIgnore]
-    public Status Status { get; set; } = null!;
     public int UserId { get; set; }
     [JsonIgnore]
     public User User { get; set; } = null!;
