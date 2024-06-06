@@ -14,7 +14,7 @@ public class DevLevelMap : IEntityTypeConfiguration<DevLevel>
 
         builder.Property(p => p.Id)
             .ValueGeneratedOnAdd()
-            .UseMySqlIdentityColumn();
+            .UseIdentityColumn();
 
         builder.Property(p => p.Description)
             .IsRequired()

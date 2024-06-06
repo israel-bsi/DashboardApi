@@ -14,7 +14,7 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
 
         builder.Property(p => p.Id)
             .ValueGeneratedOnAdd()
-            .UseMySqlIdentityColumn();
+            .UseIdentityColumn();
 
         builder.Property(p => p.Order)
             .HasColumnType("INT")
@@ -27,7 +27,7 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
 
         builder.Property(p => p.Description)
             .IsRequired()
-            .HasColumnType("TEXT");
+            .HasColumnType("VARCHAR(MAX)");
 
         builder.Property(p => p.AmountHours)
             .IsRequired()
@@ -45,11 +45,11 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
 
         builder.Property(p => p.Value)
             .IsRequired()
-            .HasColumnType("DECIMAL(7,2)");
+            .HasColumnType("DECIMAL(9,2)");
 
         builder.Property(p => p.LastUpdateAt)
             .HasColumnType("DATE")
-            .HasDefaultValue(DateTime.Now.ToUniversalTime());
+            .HasDefaultValueSql("CONVERT(DATE, GETDATE())");
 
         builder.HasOne(p => p.User)
             .WithMany(u=>u.Projects)

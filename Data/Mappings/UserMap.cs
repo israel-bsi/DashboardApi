@@ -14,7 +14,7 @@ public class UserMap : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
-            .UseMySqlIdentityColumn();
+            .UseIdentityColumn();
 
         builder.Property(x => x.Login)
             .IsRequired()
@@ -32,7 +32,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasMaxLength(100);
 
         builder.Property(x => x.Adm)
-            .HasColumnType("TINYINT")
+            .HasColumnType("BIT")
             .HasDefaultValue(0);
     }
 }

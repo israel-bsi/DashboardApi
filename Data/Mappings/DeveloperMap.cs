@@ -14,7 +14,7 @@ public class DeveloperMap : IEntityTypeConfiguration<Developer>
 
         builder.Property(p => p.Id)
             .ValueGeneratedOnAdd()
-            .UseMySqlIdentityColumn();
+            .UseIdentityColumn();
 
         builder.Property(p => p.Name)
             .IsRequired()

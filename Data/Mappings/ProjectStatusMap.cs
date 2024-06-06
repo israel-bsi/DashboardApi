@@ -23,10 +23,10 @@ public class ProjectStatusMap : IEntityTypeConfiguration<ProjectStatus>
             .HasConstraintName("FK_ProjectStats_StatsId");
 
         builder.Property(psh => psh.StartedAt)
-            .HasColumnType("DATETIME");
+            .HasColumnType("DATETIME2");
 
         builder.Property(psh => psh.EndedAt)
-            .HasColumnType("DATETIME")
+            .HasColumnType("DATETIME2")
             .HasDefaultValue(null);
     }
 }

@@ -14,7 +14,7 @@ public class PaymentStatusMap : IEntityTypeConfiguration<PaymentStatus>
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
-            .UseMySqlIdentityColumn();
+            .UseIdentityColumn();
 
         builder.Property(x => x.Description)
             .IsRequired()

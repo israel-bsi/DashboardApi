@@ -14,7 +14,7 @@ public class StatusMap : IEntityTypeConfiguration<Status>
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
-            .UseMySqlIdentityColumn();
+            .UseIdentityColumn();
 
         builder.Property(x => x.Description)
             .IsRequired()

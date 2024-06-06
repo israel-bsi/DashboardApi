@@ -11,7 +11,7 @@ public class SettingsMap : IEntityTypeConfiguration<Settings>
         builder.ToTable("Settings");
 
         builder.Property(x => x.ValuePerHour)
-            .HasColumnType("DECIMAL(7,2)");
+            .HasColumnType("DECIMAL(9,2)");
             
         builder.HasNoKey();
     }

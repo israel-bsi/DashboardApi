@@ -8,8 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DashboardContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.LogTo(Console.WriteLine);
     options.LogTo(Logger.Log);
 });
