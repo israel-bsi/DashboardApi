@@ -1,4 +1,4 @@
-﻿using DashboardApi.Data.Models;
+﻿using DashboardApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,10 +23,10 @@ public class ProjectStatusMap : IEntityTypeConfiguration<ProjectStatus>
             .HasConstraintName("FK_ProjectStats_StatsId");
 
         builder.Property(psh => psh.StartedAt)
-            .HasColumnType("DATETIME2");
+            .HasColumnType("DATE");
 
         builder.Property(psh => psh.EndedAt)
-            .HasColumnType("DATETIME2")
+            .HasColumnType("DATE")
             .HasDefaultValue(null);
     }
 }

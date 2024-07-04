@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DashboardApi.Context;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class PaymentStatusController(DashboardContext context, IMapper mapper) :
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<PaymentStatus>> GetPaymentStatusById([FromRoute] int id)
+    public async Task<ActionResult<PaymentStatus>> GetPaymentStatusById(int id)
     {
         var payment = await context.PaymentStatus
             .AsNoTracking()
@@ -31,7 +31,7 @@ public class PaymentStatusController(DashboardContext context, IMapper mapper) :
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutPaymentStatus([FromRoute] int id,[FromBody] UpdatePaymentStatusDto paymentStatusDto)
+    public async Task<IActionResult> PutPaymentStatus(int id, UpdatePaymentStatusDto paymentStatusDto)
     {
         var paymentStatus = await context.PaymentStatus.FindAsync(id);
         if (paymentStatus == null)
@@ -44,7 +44,7 @@ public class PaymentStatusController(DashboardContext context, IMapper mapper) :
     }
 
     [HttpPost]
-    public async Task<ActionResult<PaymentStatus>> PostPaymentStatus([FromBody] CreatePaymentStatusDto paymentStatusDto)
+    public async Task<ActionResult<PaymentStatus>> PostPaymentStatus(CreatePaymentStatusDto paymentStatusDto)
     {
         var paymentStatus = mapper.Map<PaymentStatus>(paymentStatusDto);
 
@@ -52,18 +52,5 @@ public class PaymentStatusController(DashboardContext context, IMapper mapper) :
         await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetPaymentStatusById), new { id = paymentStatus.Id }, paymentStatus);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeletePaymentStatus(int id)
-    {
-        var paymentStats = await context.PaymentStatus.FindAsync(id);
-        if (paymentStats == null)
-            return NotFound();
-
-        context.PaymentStatus.Remove(paymentStats);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 }

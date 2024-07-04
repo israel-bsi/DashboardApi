@@ -1,4 +1,4 @@
-﻿namespace DashboardApi.Data.Models;
+﻿namespace DashboardApi.Data.Entities;
 
 public class ProjectStatus
 {

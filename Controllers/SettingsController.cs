@@ -1,5 +1,5 @@
 ﻿using DashboardApi.Context;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

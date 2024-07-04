@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DashboardApi.Data.Models;
+namespace DashboardApi.Data.Entities;
 
 public class User
 {
@@ -9,6 +9,5 @@ public class User
     public string Name { get; set; } = null!;
     public string Password { get; set; } = null!;
     public bool Adm { get; set; }
-    [JsonIgnore]
-    public IList<Project>? Projects { get; set; }
+    [JsonIgnore] public IReadOnlyCollection<Project>? Projects { get; set; }
 }

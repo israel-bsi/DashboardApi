@@ -1,4 +1,3 @@
-using DashboardApi;
 using DashboardApi.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DashboardContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     options.LogTo(Console.WriteLine);
-    options.LogTo(Logger.Log);
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

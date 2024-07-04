@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DashboardApi.Context;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class StatusController(DashboardContext context, IMapper mapper) : Contro
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Status>> GetStatusById([FromRoute] int id)
+    public async Task<ActionResult<Status>> GetStatusById(int id)
     {
         var status = await context.Status
             .AsNoTracking()
@@ -31,7 +31,7 @@ public class StatusController(DashboardContext context, IMapper mapper) : Contro
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutStatus([FromRoute] int id, [FromBody] UpdateStatusDto statusDto)
+    public async Task<IActionResult> PutStatus(int id, UpdateStatusDto statusDto)
     {
         var status = await context.Status.FindAsync(id);
         if (status == null)
@@ -44,7 +44,7 @@ public class StatusController(DashboardContext context, IMapper mapper) : Contro
     }
 
     [HttpPost]
-    public async Task<ActionResult<Status>> PostStatus([FromBody] CreateStatusDto statusDto)
+    public async Task<ActionResult<Status>> PostStatus(CreateStatusDto statusDto)
     {
         var status = mapper.Map<Status>(statusDto);
 
@@ -52,18 +52,5 @@ public class StatusController(DashboardContext context, IMapper mapper) : Contro
         await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetStatusById), new { id = status.Id }, status);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteStatus([FromRoute] int id)
-    {
-        var projectStats = await context.Status.FindAsync(id);
-        if (projectStats == null)
-            return NotFound();
-
-        context.Status.Remove(projectStats);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 }

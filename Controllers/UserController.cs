@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DashboardApi.Context;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class UserController(DashboardContext context, IMapper mapper) : Controll
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<User>> GetUserById([FromRoute] int id)
+    public async Task<ActionResult<User>> GetUserById(int id)
     {
         var user = await context.Users
             .AsNoTracking()
@@ -31,7 +31,7 @@ public class UserController(DashboardContext context, IMapper mapper) : Controll
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] UpdateUserDto userDto)
+    public async Task<IActionResult> PutUser(int id, UpdateUserDto userDto)
     {
         var user = await context.Users.FindAsync(id);
         if (user == null)
@@ -44,7 +44,7 @@ public class UserController(DashboardContext context, IMapper mapper) : Controll
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> PostUser([FromBody] CreateUserDto userDto)
+    public async Task<ActionResult<User>> PostUser(CreateUserDto userDto)
     {
         var user = mapper.Map<User>(userDto);
 
@@ -52,18 +52,5 @@ public class UserController(DashboardContext context, IMapper mapper) : Controll
         await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteUser([FromRoute] int id)
-    {
-        var user = await context.Users.FindAsync(id);
-        if (user == null)
-            return NotFound();
-
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 }

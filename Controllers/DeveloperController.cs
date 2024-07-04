@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DashboardApi.Context;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +22,7 @@ public class DeveloperController(DashboardContext context, IMapper mapper) : Con
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Developer>> GetDeveloperById([FromRoute] int id)
+    public async Task<ActionResult<Developer>> GetDeveloperById(int id)
     {
         var developer = await context.Developers
             .AsNoTracking()
@@ -35,7 +35,7 @@ public class DeveloperController(DashboardContext context, IMapper mapper) : Con
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutDeveloper([FromRoute]int id, [FromBody] UpdateDeveloperDto developerDto)
+    public async Task<IActionResult> PutDeveloper(int id, UpdateDeveloperDto developerDto)
     {
         var developer = await context.Developers.FindAsync(id);
 
@@ -49,7 +49,7 @@ public class DeveloperController(DashboardContext context, IMapper mapper) : Con
     }
 
     [HttpPost]
-    public async Task<ActionResult<Developer>> PostDeveloper([FromBody] CreateDeveloperDto developerDto)
+    public async Task<ActionResult<Developer>> PostDeveloper(CreateDeveloperDto developerDto)
     {
         var developer = mapper.Map<Developer>(developerDto);
 
@@ -63,18 +63,5 @@ public class DeveloperController(DashboardContext context, IMapper mapper) : Con
         await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetDeveloperById), new { id = developer.Id }, developer);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteDeveloper([FromRoute] int id)
-    {
-        var developer = await context.Developers.FindAsync(id);
-        if (developer == null)
-            return NotFound();
-
-        context.Developers.Remove(developer);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 }

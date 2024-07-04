@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DashboardApi.Context;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class ProjectController(DashboardContext context, IMapper mapper) : Contr
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Project>> GetProjectById([FromRoute] int id)
+    public async Task<ActionResult<Project>> GetProjectById(int id)
     {
         var project = await context.Projects
             .AsNoTracking()
@@ -31,7 +31,7 @@ public class ProjectController(DashboardContext context, IMapper mapper) : Contr
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutProject([FromRoute] int id, [FromBody] UpdateProjectDto projectDto)
+    public async Task<IActionResult> PutProject(int id, UpdateProjectDto projectDto)
     {
        var project = await context.Projects.FindAsync(id);
         if (project == null)
@@ -44,7 +44,7 @@ public class ProjectController(DashboardContext context, IMapper mapper) : Contr
     }
 
     [HttpPost]
-    public async Task<ActionResult<Project>> PostProject([FromBody] CreateProjectDto projectDto)
+    public async Task<ActionResult<Project>> PostProject(CreateProjectDto projectDto)
     {
         var project = mapper.Map<Project>(projectDto);
 
@@ -52,18 +52,5 @@ public class ProjectController(DashboardContext context, IMapper mapper) : Contr
         await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetProjectById), new { id = project.Id }, project);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteProject([FromRoute] int id)
-    {
-        var Project = await context.Projects.FindAsync(id);
-        if (Project == null)
-            return NotFound();
-
-        context.Projects.Remove(Project);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 }

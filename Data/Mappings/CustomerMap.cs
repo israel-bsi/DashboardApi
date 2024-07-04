@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DashboardApi.Data.Mappings;
 
-public class DeveloperMap : IEntityTypeConfiguration<Developer>
+public class CustomerMap : IEntityTypeConfiguration<Customer>
 {
-    public void Configure(EntityTypeBuilder<Developer> builder)
+    public void Configure(EntityTypeBuilder<Customer> builder)
     {
-        builder.ToTable("Developer");
+        builder.ToTable("Customer");
 
         builder.HasKey(p => p.Id);
 
@@ -21,9 +21,5 @@ public class DeveloperMap : IEntityTypeConfiguration<Developer>
             .HasColumnType("VARCHAR")
             .HasMaxLength(100);
 
-        builder.HasOne(d => d.Devlevel)
-            .WithMany(dl => dl.Developers)
-            .HasForeignKey(d => d.DevLevelId)
-            .HasConstraintName("FK_Developer_DevLevel");
     }
 }

@@ -1,4 +1,4 @@
-﻿using DashboardApi.Data.Models;
+﻿using DashboardApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

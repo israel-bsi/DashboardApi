@@ -1,4 +1,4 @@
-﻿using DashboardApi.Data.Models;
+﻿using DashboardApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -27,7 +27,7 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
 
         builder.Property(p => p.Description)
             .IsRequired()
-            .HasColumnType("VARCHAR(MAX)");
+            .HasColumnType("TEXT");
 
         builder.Property(p => p.AmountHours)
             .IsRequired()
@@ -38,23 +38,31 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
             .IsRequired()
             .HasColumnType("DATE");
 
-        builder.Property(p => p.Customer)
-            .IsRequired()
-            .HasColumnType("VARCHAR")
-            .HasMaxLength(50);
-
         builder.Property(p => p.Value)
             .IsRequired()
             .HasColumnType("DECIMAL(9,2)");
 
         builder.Property(p => p.LastUpdateAt)
             .HasColumnType("DATE")
-            .HasDefaultValueSql("CONVERT(DATE, GETDATE())");
+            .HasDefaultValueSql("CURRENT_DATE");
+
+        builder.Property(p => p.Requester)
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(100);
+
+        builder.Property(p => p.RequesterEmail)
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(100);
 
         builder.HasOne(p => p.User)
             .WithMany(u=>u.Projects)
             .HasForeignKey(p => p.UserId)
             .HasConstraintName("FK_Project_User");
+
+        builder.HasOne(p => p.Customer)
+            .WithMany(c=>c.Projects)
+            .HasForeignKey(p => p.CustomerId)
+            .HasConstraintName("FK_Project_Customer");
 
         builder.HasOne(p => p.PaymentStatus)
             .WithMany(ps => ps.Projects)

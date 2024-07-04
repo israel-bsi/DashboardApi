@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DashboardApi.Context;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,7 @@ public class DevLevelController(DashboardContext context, IMapper mapper) : Cont
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<DevLevel>> GetDevLevelById([FromRoute] int id)
+    public async Task<ActionResult<DevLevel>> GetDevLevelById(int id)
     {
         var devLevel = await context.DevLevels
             .AsNoTracking()
@@ -31,7 +31,7 @@ public class DevLevelController(DashboardContext context, IMapper mapper) : Cont
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutDevLevel([FromRoute] int id, [FromBody] UpdateDevLevelDto devLevelDto)
+    public async Task<IActionResult> PutDevLevel(int id, UpdateDevLevelDto devLevelDto)
     {
         var devLevel = await context.DevLevels.FindAsync(id);
         if (devLevel == null)
@@ -44,7 +44,7 @@ public class DevLevelController(DashboardContext context, IMapper mapper) : Cont
     }
 
     [HttpPost]
-    public async Task<ActionResult<DevLevel>> PostDevLevels([FromBody] CreateDevLevelDto devLevelDto)
+    public async Task<ActionResult<DevLevel>> PostDevLevels(CreateDevLevelDto devLevelDto)
     {
         var devLevel = mapper.Map<DevLevel>(devLevelDto);
 
@@ -52,18 +52,5 @@ public class DevLevelController(DashboardContext context, IMapper mapper) : Cont
         await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetDevLevelById), new { id = devLevel.Id }, devLevel);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteDevLevels([FromRoute] int id)
-    {
-        var devLevel = await context.DevLevels.FindAsync(id);
-        if (devLevel == null)
-            return NotFound();
-
-        context.DevLevels.Remove(devLevel);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 }

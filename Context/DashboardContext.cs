@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DashboardApi.Context;
@@ -12,6 +12,7 @@ public class DashboardContext(DbContextOptions<DashboardContext> options) : DbCo
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<PaymentStatus> PaymentStatus { get; set; } = null!;
     public DbSet<Status> Status { get; set; } = null!;
+    public DbSet<Customer> Customers { get; set; } = null!;
     public DbSet<Settings> Settings { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder) 
         => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

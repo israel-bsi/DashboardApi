@@ -1,11 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DashboardApi.Data.Models;
+namespace DashboardApi.Data.Entities;
 
 public class Status
 {
     public int Id { get; set; }
     public string Description { get; set; } = null!;
-    [JsonIgnore]
-    public IList<ProjectStatus>? ProjectStats { get; set; }
+    [JsonIgnore] public IReadOnlyCollection<ProjectStatus>? ProjectStats { get; set; }
 }

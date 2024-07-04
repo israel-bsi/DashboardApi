@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DashboardApi.Data.Dtos;
-using DashboardApi.Data.Models;
+using DashboardApi.Data.Entities;
 
 namespace DashboardApi.Data.Profiles;
 

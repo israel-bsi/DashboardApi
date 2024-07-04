@@ -1,4 +1,4 @@
-﻿using DashboardApi.Data.Models;
+﻿using DashboardApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -32,7 +32,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasMaxLength(100);
 
         builder.Property(x => x.Adm)
-            .HasColumnType("BIT")
-            .HasDefaultValue(0);
+            .HasColumnType("BOOLEAN")
+            .HasDefaultValue(false);
     }
 }
