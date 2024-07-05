@@ -1,4 +1,4 @@
-using DashboardApi.Context;
+using DashboardApi.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

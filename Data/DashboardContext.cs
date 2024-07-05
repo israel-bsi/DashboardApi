@@ -2,7 +2,7 @@
 using DashboardApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DashboardApi.Context;
+namespace DashboardApi.Data;
 
 public class DashboardContext(DbContextOptions<DashboardContext> options) : DbContext(options)
 {
@@ -14,6 +14,6 @@ public class DashboardContext(DbContextOptions<DashboardContext> options) : DbCo
     public DbSet<Status> Status { get; set; } = null!;
     public DbSet<Customer> Customers { get; set; } = null!;
     public DbSet<Settings> Settings { get; set; } = null!;
-    protected override void OnModelCreating(ModelBuilder modelBuilder) 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
         => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 }
