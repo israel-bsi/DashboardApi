@@ -4,53 +4,65 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class PaymentStatusController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<PaymentStatus>>> GetPaymentStatus()
+    [Route("[controller]")]
+    [ApiController]
+    public class PaymentStatusController : ControllerBase
     {
-        return await context.PaymentStatus.AsNoTracking().ToListAsync();
-    }
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<PaymentStatus>> GetPaymentStatusById(int id)
-    {
-        var payment = await context.PaymentStatus
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p=>p.Id == id);
+        public PaymentStatusController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-        if (payment == null)
-            return NotFound();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PaymentStatus>>> GetPaymentStatus()
+        {
+            return await _context.PaymentStatus.AsNoTracking().ToListAsync();
+        }
 
-        return payment;
-    }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<PaymentStatus>> GetPaymentStatusById(int id)
+        {
+            var payment = await _context.PaymentStatus
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutPaymentStatus(int id, UpdatePaymentStatusDto paymentStatusDto)
-    {
-        var paymentStatus = await context.PaymentStatus.FindAsync(id);
-        if (paymentStatus == null)
-            return NotFound();
+            if (payment == null)
+                return NotFound();
 
-        mapper.Map(paymentStatusDto, paymentStatus);
-        await context.SaveChangesAsync();
+            return payment;
+        }
 
-        return NoContent();
-    }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutPaymentStatus(int id, UpdatePaymentStatusDto paymentStatusDto)
+        {
+            var paymentStatus = await _context.PaymentStatus.FindAsync(id);
+            if (paymentStatus == null)
+                return NotFound();
 
-    [HttpPost]
-    public async Task<ActionResult<PaymentStatus>> PostPaymentStatus(CreatePaymentStatusDto paymentStatusDto)
-    {
-        var paymentStatus = mapper.Map<PaymentStatus>(paymentStatusDto);
+            _mapper.Map(paymentStatusDto, paymentStatus);
+            await _context.SaveChangesAsync();
 
-        context.PaymentStatus.Add(paymentStatus);
-        await context.SaveChangesAsync();
+            return NoContent();
+        }
 
-        return CreatedAtAction(nameof(GetPaymentStatusById), new { id = paymentStatus.Id }, paymentStatus);
+        [HttpPost]
+        public async Task<ActionResult<PaymentStatus>> PostPaymentStatus(CreatePaymentStatusDto paymentStatusDto)
+        {
+            var paymentStatus = _mapper.Map<PaymentStatus>(paymentStatusDto);
+
+            _context.PaymentStatus.Add(paymentStatus);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetPaymentStatusById), new { id = paymentStatus.Id }, paymentStatus);
+        }
     }
 }

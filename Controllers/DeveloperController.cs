@@ -4,64 +4,76 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class DeveloperController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Developer>>> GetDevelopers()
+    [Route("[controller]")]
+    [ApiController]
+    public class DeveloperController : ControllerBase
     {
-        var developers = await context.Developers
-            .AsNoTracking()
-            .ToListAsync();
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-        return Ok(developers);
-    }
+        public DeveloperController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Developer>> GetDeveloperById(int id)
-    {
-        var developer = await context.Developers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(d=>d.Id == id);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Developer>>> GetDevelopers()
+        {
+            var developers = await _context.Developers
+                .AsNoTracking()
+                .ToListAsync();
 
-        if (developer == null)
-            return NotFound();
+            return Ok(developers);
+        }
 
-        return Ok(developer);
-    }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Developer>> GetDeveloperById(int id)
+        {
+            var developer = await _context.Developers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id);
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutDeveloper(int id, UpdateDeveloperDto developerDto)
-    {
-        var developer = await context.Developers.FindAsync(id);
+            if (developer == null)
+                return NotFound();
 
-        if(developer == null)
-            return NotFound();
+            return Ok(developer);
+        }
 
-        mapper.Map(developerDto, developer);
-        await context.SaveChangesAsync();
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutDeveloper(int id, UpdateDeveloperDto developerDto)
+        {
+            var developer = await _context.Developers.FindAsync(id);
 
-        return NoContent();
-    }
+            if (developer == null)
+                return NotFound();
 
-    [HttpPost]
-    public async Task<ActionResult<Developer>> PostDeveloper(CreateDeveloperDto developerDto)
-    {
-        var developer = mapper.Map<Developer>(developerDto);
+            _mapper.Map(developerDto, developer);
+            await _context.SaveChangesAsync();
 
-        context.Developers.Add(developer);
+            return NoContent();
+        }
 
-        var devLevel = await context.DevLevels.FindAsync(developerDto.DevLevelId);
-        if (devLevel == null)
-            return BadRequest(new {error = "Invalid DevLevelId" });
+        [HttpPost]
+        public async Task<ActionResult<Developer>> PostDeveloper(CreateDeveloperDto developerDto)
+        {
+            var developer = _mapper.Map<Developer>(developerDto);
 
-        developer.Devlevel = devLevel;
-        await context.SaveChangesAsync();
+            _context.Developers.Add(developer);
 
-        return CreatedAtAction(nameof(GetDeveloperById), new { id = developer.Id }, developer);
+            var devLevel = await _context.DevLevels.FindAsync(developerDto.DevLevelId);
+            if (devLevel == null)
+                return BadRequest(new { error = "Invalid DevLevelId" });
+
+            developer.Devlevel = devLevel;
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetDeveloperById), new { id = developer.Id }, developer);
+        }
     }
 }

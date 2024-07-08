@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace DashboardApi.Data.Entities;
-
-public class DevLevel
+namespace DashboardApi.Data.Entities
 {
-    public int Id { get; set; }
-    public string Description { get; set; } = null!;
-    [JsonIgnore] public IReadOnlyCollection<Developer> Developers { get; set; } = null!;
+    public class DevLevel
+    {
+        public int Id { get; set; }
+        public string Description { get; set; } = null!;
+        [JsonIgnore] public IReadOnlyCollection<Developer> Developers { get; set; } = null!;
+    }
 }

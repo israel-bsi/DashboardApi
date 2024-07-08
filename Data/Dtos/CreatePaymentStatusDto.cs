@@ -1,6 +1,7 @@
-﻿namespace DashboardApi.Data.Dtos;
-
-public class CreatePaymentStatusDto
+﻿namespace DashboardApi.Data.Dtos
 {
-    public string Description { get; set; } = null!;
+    public class CreatePaymentStatusDto
+    {
+        public string Description { get; set; } = null!;
+    }
 }

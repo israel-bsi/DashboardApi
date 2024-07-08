@@ -2,13 +2,14 @@
 using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 
-namespace DashboardApi.Data.Profiles;
-
-public class DevLevelProfile : Profile
+namespace DashboardApi.Data.Profiles
 {
-    public DevLevelProfile()
+    public class DevLevelProfile : Profile
     {
-        CreateMap<CreateDevLevelDto, DevLevel>();
-        CreateMap<UpdateDevLevelDto, DevLevel>();
+        public DevLevelProfile()
+        {
+            CreateMap<CreateDevLevelDto, DevLevel>();
+            CreateMap<UpdateDevLevelDto, DevLevel>();
+        }
     }
 }

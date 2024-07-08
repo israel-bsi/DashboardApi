@@ -2,17 +2,27 @@
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class SettingsController(DashboardContext context) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Settings>>> GetAllSettings()
+    [ApiController]
+    [Route("[controller]")]
+    public class SettingsController : ControllerBase
     {
-        var settings = await context.Settings.AsNoTracking().ToListAsync();
-        return settings;
+        private readonly DashboardContext _context;
+
+        public SettingsController(DashboardContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Settings>>> GetAllSettings()
+        {
+            var settings = await _context.Settings.AsNoTracking().ToListAsync();
+            return settings;
+        }
     }
 }

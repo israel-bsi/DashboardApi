@@ -2,28 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DashboardApi.Data.Mappings;
-
-public class DeveloperMap : IEntityTypeConfiguration<Developer>
+namespace DashboardApi.Data.Mappings
 {
-    public void Configure(EntityTypeBuilder<Developer> builder)
+    public class DeveloperMap : IEntityTypeConfiguration<Developer>
     {
-        builder.ToTable("Developer");
+        public void Configure(EntityTypeBuilder<Developer> builder)
+        {
+            builder.ToTable("Developer");
 
-        builder.HasKey(p => p.Id);
+            builder.HasKey(p => p.Id);
 
-        builder.Property(p => p.Id)
-            .ValueGeneratedOnAdd()
-            .UseIdentityColumn();
+            builder.Property(p => p.Id)
+                .ValueGeneratedOnAdd()
+                .UseIdentityColumn();
 
-        builder.Property(p => p.Name)
-            .IsRequired()
-            .HasColumnType("VARCHAR")
-            .HasMaxLength(100);
+            builder.Property(p => p.Name)
+                .IsRequired()
+                .HasColumnType("VARCHAR")
+                .HasMaxLength(100);
 
-        builder.HasOne(d => d.Devlevel)
-            .WithMany(dl => dl.Developers)
-            .HasForeignKey(d => d.DevLevelId)
-            .HasConstraintName("FK_Developer_DevLevel");
+            builder.HasOne(d => d.Devlevel)
+                .WithMany(dl => dl.Developers)
+                .HasForeignKey(d => d.DevLevelId)
+                .HasConstraintName("FK_Developer_DevLevel");
+        }
     }
 }

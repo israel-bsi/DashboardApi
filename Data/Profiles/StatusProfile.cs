@@ -2,13 +2,14 @@
 using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 
-namespace DashboardApi.Data.Profiles;
-
-public class StatusProfile : Profile
+namespace DashboardApi.Data.Profiles
 {
-    public StatusProfile()
+    public class StatusProfile : Profile
     {
-        CreateMap<CreateStatusDto, Status>();
-        CreateMap<UpdateStatusDto, Status>();
+        public StatusProfile()
+        {
+            CreateMap<CreateStatusDto, Status>();
+            CreateMap<UpdateStatusDto, Status>();
+        }
     }
 }

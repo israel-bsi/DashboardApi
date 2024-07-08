@@ -2,13 +2,14 @@
 using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 
-namespace DashboardApi.Data.Profiles;
-
-public class DeveloperProfile : Profile
+namespace DashboardApi.Data.Profiles
 {
-    public DeveloperProfile()
+    public class DeveloperProfile : Profile
     {
-        CreateMap<CreateDeveloperDto, Developer>();
-        CreateMap<UpdateDeveloperDto, Developer>();
+        public DeveloperProfile()
+        {
+            CreateMap<CreateDeveloperDto, Developer>();
+            CreateMap<UpdateDeveloperDto, Developer>();
+        }
     }
 }

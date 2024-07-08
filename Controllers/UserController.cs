@@ -4,53 +4,65 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class UserController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    [Route("[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        return await context.Users.AsNoTracking().ToListAsync();
-    }
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<User>> GetUserById(int id)
-    {
-        var user = await context.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u=>u.Id == id);
+        public UserController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-        if (user == null)
-            return NotFound();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            return await _context.Users.AsNoTracking().ToListAsync();
+        }
 
-        return user;
-    }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<User>> GetUserById(int id)
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutUser(int id, UpdateUserDto userDto)
-    {
-        var user = await context.Users.FindAsync(id);
-        if (user == null)
-            return NotFound();
+            if (user == null)
+                return NotFound();
 
-        mapper.Map(userDto, user);
-        await context.SaveChangesAsync();
+            return user;
+        }
 
-        return NoContent();
-    }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutUser(int id, UpdateUserDto userDto)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound();
 
-    [HttpPost]
-    public async Task<ActionResult<User>> PostUser(CreateUserDto userDto)
-    {
-        var user = mapper.Map<User>(userDto);
+            _mapper.Map(userDto, user);
+            await _context.SaveChangesAsync();
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+            return NoContent();
+        }
 
-        return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+        [HttpPost]
+        public async Task<ActionResult<User>> PostUser(CreateUserDto userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+        }
     }
 }

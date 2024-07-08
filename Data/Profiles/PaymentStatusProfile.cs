@@ -2,13 +2,14 @@
 using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 
-namespace DashboardApi.Data.Profiles;
-
-public class PaymentStatusProfile : Profile
+namespace DashboardApi.Data.Profiles
 {
-    public PaymentStatusProfile()
+    public class PaymentStatusProfile : Profile
     {
-        CreateMap<CreatePaymentStatusDto, PaymentStatus>();
-        CreateMap<UpdatePaymentStatusDto, PaymentStatus>();
+        public PaymentStatusProfile()
+        {
+            CreateMap<CreatePaymentStatusDto, PaymentStatus>();
+            CreateMap<UpdatePaymentStatusDto, PaymentStatus>();
+        }
     }
 }

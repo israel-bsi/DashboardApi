@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace DashboardApi.Data.Entities;
-
-public class Customer
+namespace DashboardApi.Data.Entities
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    [JsonIgnore] public IReadOnlyCollection<Project>? Projects { get; set; }
+    public class Customer
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        [JsonIgnore] public IReadOnlyCollection<Project>? Projects { get; set; }
+    }
 }

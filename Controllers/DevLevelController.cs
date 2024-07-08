@@ -4,53 +4,65 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class DevLevelController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<DevLevel>>> GetDevLevels()
+    [Route("[controller]")]
+    [ApiController]
+    public class DevLevelController : ControllerBase
     {
-        return await context.DevLevels.AsNoTracking().ToListAsync();
-    }
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<DevLevel>> GetDevLevelById(int id)
-    {
-        var devLevel = await context.DevLevels
-            .AsNoTracking()
-            .FirstOrDefaultAsync(d=>d.Id == id);
-        
-        if (devLevel == null)
-            return NotFound();
+        public DevLevelController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-        return devLevel;
-    }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DevLevel>>> GetDevLevels()
+        {
+            return await _context.DevLevels.AsNoTracking().ToListAsync();
+        }
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutDevLevel(int id, UpdateDevLevelDto devLevelDto)
-    {
-        var devLevel = await context.DevLevels.FindAsync(id);
-        if (devLevel == null)
-            return NotFound();
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<DevLevel>> GetDevLevelById(int id)
+        {
+            var devLevel = await _context.DevLevels
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id);
 
-        mapper.Map(devLevelDto, devLevel);
-        await context.SaveChangesAsync();
+            if (devLevel == null)
+                return NotFound();
 
-        return NoContent();
-    }
+            return devLevel;
+        }
 
-    [HttpPost]
-    public async Task<ActionResult<DevLevel>> PostDevLevels(CreateDevLevelDto devLevelDto)
-    {
-        var devLevel = mapper.Map<DevLevel>(devLevelDto);
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutDevLevel(int id, UpdateDevLevelDto devLevelDto)
+        {
+            var devLevel = await _context.DevLevels.FindAsync(id);
+            if (devLevel == null)
+                return NotFound();
 
-        context.DevLevels.Add(devLevel);
-        await context.SaveChangesAsync();
+            _mapper.Map(devLevelDto, devLevel);
+            await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetDevLevelById), new { id = devLevel.Id }, devLevel);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<DevLevel>> PostDevLevels(CreateDevLevelDto devLevelDto)
+        {
+            var devLevel = _mapper.Map<DevLevel>(devLevelDto);
+
+            _context.DevLevels.Add(devLevel);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetDevLevelById), new { id = devLevel.Id }, devLevel);
+        }
     }
 }

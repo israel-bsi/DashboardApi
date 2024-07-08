@@ -2,37 +2,38 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DashboardApi.Data.Mappings;
-
-public class UserMap : IEntityTypeConfiguration<User>
+namespace DashboardApi.Data.Mappings
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public class UserMap : IEntityTypeConfiguration<User>
     {
-        builder.ToTable("User");
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.ToTable("User");
 
-        builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd()
-            .UseIdentityColumn();
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd()
+                .UseIdentityColumn();
 
-        builder.Property(x => x.Login)
-            .IsRequired()
-            .HasColumnType("VARCHAR")
-            .HasMaxLength(100);
+            builder.Property(x => x.Login)
+                .IsRequired()
+                .HasColumnType("VARCHAR")
+                .HasMaxLength(100);
 
-        builder.Property(x => x.Name)
-            .IsRequired()
-            .HasColumnType("VARCHAR")
-            .HasMaxLength(100);
+            builder.Property(x => x.Name)
+                .IsRequired()
+                .HasColumnType("VARCHAR")
+                .HasMaxLength(100);
 
-        builder.Property(x => x.Password)
-            .IsRequired()
-            .HasColumnType("VARCHAR")
-            .HasMaxLength(100);
+            builder.Property(x => x.Password)
+                .IsRequired()
+                .HasColumnType("VARCHAR")
+                .HasMaxLength(100);
 
-        builder.Property(x => x.Adm)
-            .HasColumnType("BOOLEAN")
-            .HasDefaultValue(false);
+            builder.Property(x => x.Adm)
+                .HasColumnType("BOOLEAN")
+                .HasDefaultValue(false);
+        }
     }
 }

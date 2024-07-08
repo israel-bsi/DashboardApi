@@ -1,6 +1,7 @@
-﻿namespace DashboardApi.Data.Dtos;
-
-public class CustomerDto
+﻿namespace DashboardApi.Data.Dtos
 {
-    public string Name { get; set; } = null!;
+    public class CustomerDto
+    {
+        public string Name { get; set; } = null!;
+    }
 }

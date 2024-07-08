@@ -2,17 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DashboardApi.Data.Mappings;
-
-public class SettingsMap : IEntityTypeConfiguration<Settings>
+namespace DashboardApi.Data.Mappings
 {
-    public void Configure(EntityTypeBuilder<Settings> builder)
+    public class SettingsMap : IEntityTypeConfiguration<Settings>
     {
-        builder.ToTable("Settings");
+        public void Configure(EntityTypeBuilder<Settings> builder)
+        {
+            builder.ToTable("Settings");
 
-        builder.Property(x => x.ValuePerHour)
-            .HasColumnType("DECIMAL(9,2)");
-            
-        builder.HasNoKey();
+            builder.Property(x => x.ValuePerHour)
+                .HasColumnType("DECIMAL(9,2)");
+
+            builder.HasNoKey();
+        }
     }
 }

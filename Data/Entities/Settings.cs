@@ -1,6 +1,7 @@
-﻿namespace DashboardApi.Data.Entities;
-
-public class Settings
+﻿namespace DashboardApi.Data.Entities
 {
-    public decimal ValuePerHour { get; set; }
+    public class Settings
+    {
+        public decimal ValuePerHour { get; set; }
+    }
 }

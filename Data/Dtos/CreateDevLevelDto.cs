@@ -1,6 +1,7 @@
-﻿namespace DashboardApi.Data.Dtos;
-
-public class CreateDevLevelDto
+﻿namespace DashboardApi.Data.Dtos
 {
-    public string Description { get; set; } = null!;
+    public class CreateDevLevelDto
+    {
+        public string Description { get; set; } = null!;
+    }
 }

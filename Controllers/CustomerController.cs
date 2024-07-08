@@ -4,58 +4,70 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class CustomerController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
+    [Route("[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
     {
-        var customers = await context.Customers
-            .AsNoTracking()
-            .ToListAsync();
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-        return Ok(customers);
-    }
+        public CustomerController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
-    {
-        var customer = await context.Customers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(c=>c.Id == id);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
+        {
+            var customers = await _context.Customers
+                .AsNoTracking()
+                .ToListAsync();
 
-        if (customer == null)
-            return NotFound();
+            return Ok(customers);
+        }
 
-        return Ok(customer);
-    }
-    
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutCustomer(int id, CustomerDto customerDto)
-    {
-        var customerToUpdate = await context.Customers.FindAsync(id);
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
+        {
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (customerToUpdate == null)
-            return NotFound();
+            if (customer == null)
+                return NotFound();
 
-        mapper.Map(customerDto, customerToUpdate);
-        await context.SaveChangesAsync();
+            return Ok(customer);
+        }
 
-        return NoContent();
-    }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutCustomer(int id, CustomerDto customerDto)
+        {
+            var customerToUpdate = await _context.Customers.FindAsync(id);
 
-    [HttpPost]
-    public async Task<ActionResult<CustomerDto>> PostCustomer(CustomerDto customerDto)
-    {
-        var customer = mapper.Map<Customer>(customerDto);
+            if (customerToUpdate == null)
+                return NotFound();
 
-        context.Customers.Add(customer);
-        await context.SaveChangesAsync();
+            _mapper.Map(customerDto, customerToUpdate);
+            await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CustomerDto>> PostCustomer(CustomerDto customerDto)
+        {
+            var customer = _mapper.Map<Customer>(customerDto);
+
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
+        }
     }
 }

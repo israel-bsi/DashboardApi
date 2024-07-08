@@ -4,53 +4,65 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class StatusController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Status>>> GetStatus()
+    [Route("[controller]")]
+    [ApiController]
+    public class StatusController : ControllerBase
     {
-        return await context.Status.AsNoTracking().ToListAsync();
-    }
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Status>> GetStatusById(int id)
-    {
-        var status = await context.Status
-            .AsNoTracking()
-            .FirstOrDefaultAsync(s=>s.Id == id);
+        public StatusController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-        if (status == null)
-            return NotFound();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Status>>> GetStatus()
+        {
+            return await _context.Status.AsNoTracking().ToListAsync();
+        }
 
-        return status;
-    }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Status>> GetStatusById(int id)
+        {
+            var status = await _context.Status
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == id);
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutStatus(int id, UpdateStatusDto statusDto)
-    {
-        var status = await context.Status.FindAsync(id);
-        if (status == null)
-            return NotFound();
+            if (status == null)
+                return NotFound();
 
-        mapper.Map(statusDto, status);
-        await context.SaveChangesAsync();
+            return status;
+        }
 
-        return NoContent();
-    }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutStatus(int id, UpdateStatusDto statusDto)
+        {
+            var status = await _context.Status.FindAsync(id);
+            if (status == null)
+                return NotFound();
 
-    [HttpPost]
-    public async Task<ActionResult<Status>> PostStatus(CreateStatusDto statusDto)
-    {
-        var status = mapper.Map<Status>(statusDto);
+            _mapper.Map(statusDto, status);
+            await _context.SaveChangesAsync();
 
-        context.Status.Add(status);
-        await context.SaveChangesAsync();
+            return NoContent();
+        }
 
-        return CreatedAtAction(nameof(GetStatusById), new { id = status.Id }, status);
+        [HttpPost]
+        public async Task<ActionResult<Status>> PostStatus(CreateStatusDto statusDto)
+        {
+            var status = _mapper.Map<Status>(statusDto);
+
+            _context.Status.Add(status);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetStatusById), new { id = status.Id }, status);
+        }
     }
 }

@@ -4,53 +4,65 @@ using DashboardApi.Data.Dtos;
 using DashboardApi.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace DashboardApi.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class ProjectController(DashboardContext context, IMapper mapper) : ControllerBase
+namespace DashboardApi.Controllers
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+    [Route("[controller]")]
+    [ApiController]
+    public class ProjectController : ControllerBase
     {
-        return await context.Projects.AsNoTracking().ToListAsync();
-    }
+        private readonly DashboardContext _context;
+        private readonly IMapper _mapper;
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Project>> GetProjectById(int id)
-    {
-        var project = await context.Projects
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p=>p.Id == id);
+        public ProjectController(DashboardContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-        if (project == null)
-            return NotFound();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        {
+            return await _context.Projects.AsNoTracking().ToListAsync();
+        }
 
-        return project;
-    }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Project>> GetProjectById(int id)
+        {
+            var project = await _context.Projects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutProject(int id, UpdateProjectDto projectDto)
-    {
-       var project = await context.Projects.FindAsync(id);
-        if (project == null)
-            return NotFound();
+            if (project == null)
+                return NotFound();
 
-        mapper.Map(projectDto, project);
-        await context.SaveChangesAsync();
+            return project;
+        }
 
-        return NoContent();
-    }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutProject(int id, UpdateProjectDto projectDto)
+        {
+            var project = await _context.Projects.FindAsync(id);
+            if (project == null)
+                return NotFound();
 
-    [HttpPost]
-    public async Task<ActionResult<Project>> PostProject(CreateProjectDto projectDto)
-    {
-        var project = mapper.Map<Project>(projectDto);
+            _mapper.Map(projectDto, project);
+            await _context.SaveChangesAsync();
 
-        context.Projects.Add(project);
-        await context.SaveChangesAsync();
+            return NoContent();
+        }
 
-        return CreatedAtAction(nameof(GetProjectById), new { id = project.Id }, project);
+        [HttpPost]
+        public async Task<ActionResult<Project>> PostProject(CreateProjectDto projectDto)
+        {
+            var project = _mapper.Map<Project>(projectDto);
+
+            _context.Projects.Add(project);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetProjectById), new { id = project.Id }, project);
+        }
     }
 }
