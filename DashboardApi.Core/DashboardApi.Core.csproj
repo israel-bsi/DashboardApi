@@ -9,8 +9,13 @@
   <ItemGroup>
     <Folder Include="Common\Extensions\" />
     <Folder Include="Handler\" />
-    <Folder Include="Response\" />
-    <Folder Include="Request\" />
+    <Folder Include="Request\Customer\" />
+    <Folder Include="Request\Developer\" />
+    <Folder Include="Request\DevLevel\" />
+    <Folder Include="Request\User\" />
+    <Folder Include="Request\ProjectStatus\" />
+    <Folder Include="Request\Settings\" />
+    <Folder Include="Request\Project\" />
   </ItemGroup>
 
 </Project>

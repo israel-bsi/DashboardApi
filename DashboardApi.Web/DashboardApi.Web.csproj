@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <Compile Remove="Request\**" />
+    <Content Remove="Request\**" />
+    <EmbeddedResource Remove="Request\**" />
+    <None Remove="Request\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,13 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handler\" />
-    <Folder Include="Request\" />
-    <Folder Include="Response\" />
+    <ProjectReference Include="..\DashboardApi.Core\DashboardApi.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DashboardApi.Core\DashboardApi.Core.csproj" />
+    <Folder Include="Endpoints\Developers\" />
+    <Folder Include="Endpoints\User\" />
+    <Folder Include="Endpoints\Status\" />
+    <Folder Include="Endpoints\Settings\" />
+    <Folder Include="Endpoints\Project\" />
   </ItemGroup>
 
 </Project>

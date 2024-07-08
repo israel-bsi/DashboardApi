@@ -20,10 +20,5 @@ public class DeveloperMap : IEntityTypeConfiguration<Developer>
             .IsRequired()
             .HasColumnType("VARCHAR")
             .HasMaxLength(100);
-
-        builder.HasOne(d => d.Devlevel)
-            .WithMany(dl => dl.Developers)
-            .HasForeignKey(d => d.DevLevelId)
-            .HasConstraintName("FK_Developer_DevLevel");
     }
 }

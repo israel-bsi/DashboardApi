@@ -64,10 +64,10 @@ public class ProjectMap : IEntityTypeConfiguration<Project>
             .HasForeignKey(p => p.CustomerId)
             .HasConstraintName("FK_Project_Customer");
 
-        builder.HasOne(p => p.PaymentStatus)
-            .WithMany(ps => ps.Projects)
-            .HasForeignKey(p => p.PaymentStatusId)
-            .HasConstraintName("FK_Project_PaymentStatus");
+        //builder.HasOne(p => p.PaymentStatus)
+        //    .WithMany(ps => ps.Projects)
+        //    .HasForeignKey(p => p.PaymentStatusId)
+        //    .HasConstraintName("FK_Project_PaymentStatus");
 
         builder.HasMany(d => d.Developers)
             .WithMany(p => p.Projects)
